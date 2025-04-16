@@ -1,0 +1,267 @@
+.page-title {
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  font-size: 24px;
+  font-weight: bold;
+  -fx-text-fill: #2c3e50;
+}
+
+.action-button {
+  -fx-background-color: #007bff;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-padding: 8 15;
+  background-color: #2196f3;
+  color: white;
+  font-weight: bold;
+  padding: 8px 15px;
+  -fx-font-size: 14px;
+  -fx-background-radius: 5;
+}
+
+.action-button:hover {
+  -fx-background-color: #0056b3;
+  background-color: #1976d2;
+}
+
+.table-view {
+  -fx-background-color: transparent;
+  background-color: white;
+}
+
+.table-view .column-header {
+  -fx-background-color: #f8f9fa;
+  -fx-font-weight: bold;
+  background-color: #f8f9fa;
+  font-weight: bold;
+  -fx-padding: 10;
+}
+
+.table-view .column-header .label {
+  -fx-font-weight: bold;
+  -fx-text-fill: #495057;
+}
+
+.table-view .table-row-cell {
+  -fx-background-color: white;
+  -fx-border-color: transparent transparent #dee2e6 transparent;
+  -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-row-cell:hover {
+  -fx-background-color: #f8f9fa;
+}
+
+.table-view .table-row-cell:selected {
+  -fx-background-color: #e3f2fd;
+  background-color: #e3f2fd;
+}
+
+/* Button styles in table */
+.table-view .button {
+  -fx-background-color: transparent;
+  -fx-text-fill: #007bff;
+  -fx-padding: 5 10;
+  -fx-cursor: hand;
+}
+
+.table-view .button:hover {
+  -fx-text-fill: #0056b3;
+}
+
+.low-stock {
+  -fx-text-fill: #dc3545;
+  color: #dc3545;
+}
+
+.note-text {
+  -fx-font-style: italic;
+  -fx-text-fill: #6c757d;
+  font-style: italic;
+  color: #6c757d;
+}
+
+.edit-button {
+  -fx-background-color: #28a745;
+  -fx-text-fill: white;
+  background-color: #28a745;
+  color: white;
+}
+
+.delete-button {
+  -fx-background-color: #dc3545;
+  -fx-text-fill: white;
+  background-color: #dc3545;
+  color: white;
+}
+
+.search-field {
+  -fx-pref-height: 35px;
+  -fx-background-radius: 5;
+  height: 35px;
+  border-radius: 5px;
+}
+
+.form-field {
+  -fx-pref-height: 35px;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+  -fx-border-color: #ced4da;
+  -fx-border-width: 1;
+  height: 35px;
+  border-radius: 5px;
+  border-color: #ced4da;
+  border-width: 1px;
+  border: 1px solid #ced4da;
+}
+
+.form-field:focused {
+  -fx-border-color: #2196f3;
+  -fx-background-color: #fff;
+  border-color: #2196f3;
+  background-color: #fff;
+}
+
+.error-field {
+  -fx-border-color: #dc3545;
+  -fx-background-color: #fff8f8;
+  border-color: #dc3545;
+  background-color: #fff8f8;
+}
+
+.error-field:focused {
+  -fx-border-color: #dc3545;
+  -fx-background-color: #fff8f8;
+  border-color: #dc3545;
+  background-color: #fff8f8;
+}
+
+/* Dialog styles */
+.dialog-pane {
+  -fx-background-color: white;
+  background-color: white;
+}
+
+.dialog-pane .button {
+  -fx-min-width: 100px;
+  -fx-min-height: 35px;
+  min-width: 100px;
+  min-height: 35px;
+}
+
+.dialog-pane .button.default {
+  -fx-background-color: #2196f3;
+  -fx-text-fill: white;
+  background-color: #2196f3;
+  color: white;
+}
+
+.dialog-pane .button.default:hover {
+  -fx-background-color: #1976d2;
+  background-color: #1976d2;
+}
+
+.dialog-pane .button.cancel {
+  -fx-background-color: #e9ecef;
+  -fx-text-fill: #212529;
+  background-color: #e9ecef;
+  color: #212529;
+}
+
+.dialog-pane .button.cancel:hover {
+  -fx-background-color: #dee2e6;
+  background-color: #dee2e6;
+}
+
+/* Table row hover effect */
+.table-row-cell:hover {
+  -fx-background-color: #f8f9fa;
+  background-color: #f8f9fa;
+}
+
+/* Button styles in table */
+.edit-button,
+.delete-button {
+  -fx-min-width: 60px;
+  -fx-min-height: 30px;
+  -fx-background-radius: 5;
+  min-width: 60px;
+  min-height: 30px;
+  border-radius: 5px;
+}
+
+.edit-button:hover {
+  -fx-background-color: #218838;
+  background-color: #218838;
+}
+
+.delete-button:hover {
+  -fx-background-color: #c82333;
+  background-color: #c82333;
+}
+
+/* Statistics Panel Styles */
+.stats-panel {
+  -fx-background-color: white;
+  -fx-padding: 15;
+  -fx-spacing: 20;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.stat-box {
+  -fx-background-color: #f8f9fa;
+  -fx-padding: 15;
+  -fx-background-radius: 8;
+  -fx-border-radius: 8;
+  -fx-border-color: #e9ecef;
+  -fx-border-width: 1;
+  -fx-min-width: 200;
+  -fx-alignment: center;
+  background-color: white;
+  padding: 15px;
+  border-radius: 5px;
+  border-color: #e9ecef;
+  border-width: 1px;
+  border: 1px solid #e9ecef;
+  min-width: 200px;
+}
+
+.stat-label {
+  -fx-font-size: 14px;
+  -fx-text-fill: #6c757d;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.stat-value {
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2196f3;
+}
+
+.stat-box:hover {
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+  -fx-border-color: #2196f3;
+  border-color: #2196f3;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Search field */
+.text-field {
+  -fx-padding: 8;
+  -fx-background-color: white;
+  -fx-border-color: #ced4da;
+  -fx-border-radius: 4;
+  -fx-background-radius: 4;
+}
+
+.text-field:focused {
+  -fx-border-color: #80bdff;
+  -fx-effect: dropshadow(gaussian, rgba(0, 123, 255, 0.25), 0, 0, 0, 0);
+}

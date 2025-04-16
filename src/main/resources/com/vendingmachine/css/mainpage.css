@@ -1,0 +1,346 @@
+/* Header styles */
+.header {
+  background-color: #2196f3;
+  -fx-background-color: #2196f3;
+}
+
+.header-title {
+  color: white;
+  -fx-text-fill: white;
+  font-size: 26px;
+  -fx-font-size: 26px;
+  font-weight: bold;
+  -fx-font-weight: bold;
+}
+
+/* Product grid styles */
+.products-pane {
+  background-color: #f5f5f5;
+  -fx-background-color: #f5f5f5;
+  -fx-hgap: 15;
+  -fx-vgap: 15;
+  -fx-padding: 15;
+}
+
+.product-box {
+  -fx-border-color: #e0e0e0;
+  -fx-background-color: white;
+  -fx-border-radius: 8;
+  -fx-background-radius: 8;
+  -fx-pref-width: 180;
+  -fx-min-width: 180;
+  -fx-max-width: 180;
+  -fx-pref-height: 250;
+  -fx-min-height: 250;
+  -fx-max-height: 250;
+  -fx-alignment: center;
+  -fx-spacing: 8;
+}
+
+.product-box:hover {
+  -fx-border-color: #2196f3;
+}
+
+.product-name {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 16px;
+  -fx-font-size: 16px;
+}
+
+.product-price {
+  color: #2196f3;
+  -fx-text-fill: #2196f3;
+}
+
+.product-button {
+  -fx-background-color: #2196f3;
+  -fx-background-radius: 18;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-pref-height: 35;
+  -fx-pref-width: 100;
+  -fx-cursor: hand;
+}
+
+.product-button:hover {
+  -fx-background-color: #1976d2;
+}
+
+.product-button:pressed {
+  -fx-background-color: #1565c0;
+}
+
+/* Cart panel styles */
+.cart-panel {
+  -fx-background-color: white;
+  -fx-spacing: 15;
+  -fx-padding: 15;
+}
+
+.cart-title {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 22px;
+  -fx-font-size: 22px;
+}
+
+.cart-list {
+  border-radius: 8px;
+  -fx-background-radius: 8;
+  -fx-border-radius: 8;
+  border-color: #eeeeee;
+  -fx-border-color: #eeeeee;
+  border-width: 1px;
+  -fx-border-width: 1;
+}
+
+/* Cart list item styles */
+.cart-list .list-cell {
+  background-color: white;
+  -fx-background-color: white;
+  padding: 10px;
+  -fx-padding: 10;
+  border-style: solid;
+  border-width: 0 0 1px 0;
+  border-color: transparent transparent #eeeeee transparent;
+  -fx-border-color: transparent transparent #eeeeee transparent;
+  transition: all 0.2s ease;
+  transition-duration: 0.2s;
+  -fx-transition-duration: 0.2s;
+}
+
+.cart-list .list-cell:hover {
+  background-color: #f8f9fa;
+  -fx-background-color: #f8f9fa;
+}
+
+.cart-list .list-cell:selected {
+  background-color: #e3f2fd;
+  -fx-background-color: #e3f2fd;
+  border-color: #2196f3;
+  -fx-border-color: transparent transparent #2196f3 transparent;
+}
+
+.cart-list .list-cell:empty {
+  background-color: transparent;
+  -fx-background-color: transparent;
+  border: none;
+  border-width: 0;
+  -fx-border-width: 0;
+}
+
+.total-price-box {
+  background-color: #f5f9fe;
+  -fx-background-color: #f5f9fe;
+  border-radius: 8px;
+  -fx-background-radius: 8;
+  padding: 15px;
+  -fx-padding: 15;
+  -fx-margin-top: 10;
+  -fx-margin-bottom: 10;
+}
+
+.total-price-label {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 16px;
+  -fx-font-size: 16px;
+}
+
+.total-price-value {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  color: #3498db;
+  -fx-text-fill: #3498db;
+  font-size: 18px;
+  -fx-font-size: 18px;
+}
+
+/* Payment section styles */
+.payment-title {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 20px;
+  -fx-font-size: 20px;
+}
+
+.payment-button {
+  -fx-background-color: #2ecc71;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 10;
+  -fx-font-size: 16px;
+  -fx-pref-height: 50;
+  -fx-pref-width: 220;
+  -fx-cursor: hand;
+  -fx-margin: 10;
+  -fx-margin-bottom: 15;
+}
+
+.payment-button:hover {
+  -fx-background-color: #27ae60;
+}
+
+.payment-button:pressed {
+  -fx-background-color: #219a52;
+}
+
+.cancel-button {
+  -fx-background-color: #e74c3c;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 10;
+  -fx-font-size: 16px;
+  -fx-pref-height: 50;
+  -fx-pref-width: 220;
+  -fx-cursor: hand;
+  -fx-margin: 10;
+  -fx-margin-top: 15;
+}
+
+.cancel-button:hover {
+  -fx-background-color: #c0392b;
+}
+
+.cancel-button:pressed {
+  -fx-background-color: #a93224;
+}
+
+/* Footer styles */
+.footer {
+  background: linear-gradient(to right, #e6e9f0, #d8dee9);
+  background-color: #e6e9f0; /* Fallback for browsers that don't support gradients */
+  -fx-background-color: linear-gradient(to right, #e6e9f0, #d8dee9);
+  border-color: #b8c4d8;
+  -fx-border-color: #b8c4d8;
+  border-width: 1px 0 0 0;
+  -fx-border-width: 1 0 0 0;
+}
+
+.logo-box {
+  background-color: #ff5a5f;
+  -fx-background-color: #ff5a5f;
+  border-radius: 5px;
+  -fx-background-radius: 5;
+}
+
+.logo-text {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 18px;
+  -fx-font-size: 18px;
+  color: white;
+  -fx-text-fill: white;
+}
+
+.brand-text {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 18px;
+  -fx-font-size: 18px;
+}
+
+.brand-highlight {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 18px;
+  -fx-font-size: 18px;
+  color: #ff5a5f;
+  -fx-text-fill: #ff5a5f;
+}
+
+.date-time {
+  font-size: 14px;
+  -fx-font-size: 14px;
+  color: #444444;
+  -fx-text-fill: #444444;
+}
+
+.time {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 26px;
+  -fx-font-size: 26px;
+  color: #333333;
+  -fx-text-fill: #333333;
+}
+
+.balance-bar {
+  background-color: #f8f9fa;
+  -fx-background-color: #f8f9fa;
+  border-color: #e9ecef;
+  -fx-border-color: #e9ecef;
+  border-width: 0 0 1px 0;
+  -fx-border-width: 0 0 1 0;
+}
+
+.balance-text {
+  font-size: 16px;
+  -fx-font-size: 16px;
+  font-weight: bold;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+}
+
+.deposit-button {
+  -fx-background-color: #2ecc71;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 10;
+  -fx-font-size: 16px;
+  -fx-pref-height: 40;
+  -fx-pref-width: 220;
+  -fx-cursor: hand;
+}
+
+.deposit-button:hover {
+  background-color: #218838;
+  -fx-background-color: #218838;
+}
+
+.deposit-button:pressed {
+  background-color: #1e7e34;
+  -fx-background-color: #1e7e34;
+}
+
+.admin-button {
+  background-color: #6c757d;
+  -fx-background-color: #6c757d;
+  font-size: 14px;
+  -fx-font-size: 14px;
+  padding: 8px 15px;
+  -fx-padding: 8 15;
+}
+
+.admin-button:hover {
+  background-color: #5a6268;
+  -fx-background-color: #5a6268;
+}
+
+.balance-box {
+  background-color: #f8f9fa;
+  -fx-background-color: #f8f9fa;
+  border-radius: 8px;
+  -fx-background-radius: 8;
+  padding: 15px;
+  -fx-padding: 15;
+  -fx-margin-top: 20;
+  -fx-margin-bottom: 20;
+}
+
+.balance-label {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  font-size: 16px;
+  -fx-font-size: 16px;
+}
+
+.balance-value {
+  font-weight: bold;
+  -fx-font-weight: bold;
+  color: #3498db;
+  -fx-text-fill: #3498db;
+  font-size: 18px;
+  -fx-font-size: 18px;
+}

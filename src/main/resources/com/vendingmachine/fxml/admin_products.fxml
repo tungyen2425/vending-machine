@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vendingmachine.controller.AdminProductController">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="10" left="20" right="20" top="20" />
+            </padding>
+            
+            <!-- Statistics Panel -->
+            <HBox spacing="20" styleClass="stats-panel">
+                <VBox styleClass="stat-box">
+                    <Label styleClass="stat-label" text="Tổng sản phẩm" />
+                    <Label fx:id="totalProductsLabel" styleClass="stat-value" text="0" />
+                </VBox>
+                <VBox styleClass="stat-box">
+                    <Label styleClass="stat-label" text="Sản phẩm sắp hết" />
+                    <Label fx:id="lowStockLabel" styleClass="stat-value" text="0" />
+                </VBox>
+                <VBox styleClass="stat-box">
+                    <Label styleClass="stat-label" text="Tổng giá trị tồn kho" />
+                    <Label fx:id="totalValueLabel" styleClass="stat-value" text="0 VNĐ" />
+                </VBox>
+                <VBox styleClass="stat-box">
+                    <Label styleClass="stat-label" text="Tổng doanh thu" />
+                    <Label fx:id="totalRevenueLabel" styleClass="stat-value" text="0 VNĐ" />
+                </VBox>
+            </HBox>
+            
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label styleClass="page-title" text="Quản lý sản phẩm" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" styleClass="action-button" text="Xem lịch sử đơn hàng" />
+                <Button fx:id="addProductButton" onAction="#handleAddProduct" styleClass="action-button" text="Thêm sản phẩm mới" />
+            </HBox>
+            
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <TextField fx:id="searchField" promptText="Tìm kiếm theo tên hoặc mã sản phẩm" HBox.hgrow="ALWAYS" />
+                <Button text="Tìm kiếm" />
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <TableView fx:id="productTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="100" text="Mã SP" />
+                <TableColumn fx:id="nameColumn" prefWidth="200" text="Tên sản phẩm" />
+                <TableColumn fx:id="priceColumn" prefWidth="150" text="Giá" />
+                <TableColumn fx:id="quantityColumn" prefWidth="100" text="Số lượng" />
+                <TableColumn fx:id="imageColumn" prefWidth="150" text="Hình ảnh" />
+                <TableColumn fx:id="actionsColumn" prefWidth="150" text="Thao tác" />
+            </columns>
+            <placeholder>
+                <Label text="Không có sản phẩm nào" />
+            </placeholder>
+        </TableView>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+        </HBox>
+    </bottom>
+</BorderPane>

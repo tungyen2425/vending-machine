@@ -1,0 +1,61 @@
+.notification {
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 3);
+}
+
+.notification-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.notification-message {
+    -fx-font-size: 12px;
+    -fx-text-fill: #34495e;
+}
+
+.success-notification {
+    -fx-background-color: #dff0d8;
+    -fx-border-color: #d6e9c6;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.success-notification .notification-title {
+    -fx-text-fill: #3c763d;
+}
+
+.error-notification {
+    -fx-background-color: #f2dede;
+    -fx-border-color: #ebccd1;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.error-notification .notification-title {
+    -fx-text-fill: #a94442;
+}
+
+.warning-notification {
+    -fx-background-color: #fcf8e3;
+    -fx-border-color: #faebcc;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.warning-notification .notification-title {
+    -fx-text-fill: #8a6d3b;
+}
+
+.popup-box {
+    -fx-background-color: rgba(60, 63, 65, 0.9);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+.popup-message {
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
