@@ -98,12 +98,30 @@ public class VendingMachineController {
         priceLabel.getStyleClass().add("product-price");
         VBox.setMargin(priceLabel, new Insets(5));
 
-        Button selectButton = new Button("Chọn");
-        selectButton.getStyleClass().add("product-button");
-        selectButton.setOnAction(e -> handleProductSelection(name, price));
-        VBox.setMargin(selectButton, new Insets(5, 0, 0, 0));
-
-        productBox.getChildren().addAll(imageView, nameLabel, priceLabel, selectButton);
+        Button actionButton;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT quantity FROM products WHERE id = ?")) {
+            
+            stmt.setInt(1, productIdMap.get(name));
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next() && rs.getInt("quantity") > 0) {
+                actionButton = new Button("Chọn");
+                actionButton.getStyleClass().add("product-button");
+                actionButton.setOnAction(e -> handleProductSelection(name, price));
+            } else {
+                actionButton = new Button("Hết hàng");
+                actionButton.getStyleClass().addAll("product-button", "out-of-stock");
+                actionButton.setDisable(true);
+            }
+        } catch (SQLException e) {
+            actionButton = new Button("Lỗi");
+            actionButton.setDisable(true);
+            showError("Lỗi khi kiểm tra số lượng: " + e.getMessage());
+        }
+        
+        VBox.setMargin(actionButton, new Insets(5, 0, 0, 0));
+        productBox.getChildren().addAll(imageView, nameLabel, priceLabel, actionButton);
         return productBox;
     }
 
@@ -183,15 +201,40 @@ public class VendingMachineController {
     }
 
     public void handleProductSelection(String productName, double price) {
-        if (balance >= price) {
-            balance -= price;
-            totalPrice += price;
-            cartItems.add(productName + " - " + currencyFormat.format(price));
-            currentCart.merge(productName, 1, Integer::sum);
-            updateBalanceDisplay();
-            updateTotalPrice();
-        } else {
-            showError("Số dư không đủ. Vui lòng nạp thêm tiền.");
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT quantity FROM products WHERE id = ?")) {
+            
+            int productId = productIdMap.get(productName);
+            stmt.setInt(1, productId);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                int availableQuantity = rs.getInt("quantity");
+                int currentQuantity = currentCart.getOrDefault(productName, 0);
+                
+                if (availableQuantity <= 0) {
+                    showError("Sản phẩm đã hết hàng!");
+                    return;
+                }
+                
+                if (currentQuantity >= availableQuantity) {
+                    showError("Số lượng trong kho không đủ!");
+                    return;
+                }
+                
+                if (balance >= price) {
+                    balance -= price;
+                    totalPrice += price;
+                    cartItems.add(productName + " - " + currencyFormat.format(price));
+                    currentCart.merge(productName, 1, Integer::sum);
+                    updateBalanceDisplay();
+                    updateTotalPrice();
+                } else {
+                    showError("Số dư không đủ. Vui lòng nạp thêm tiền.");
+                }
+            }
+        } catch (SQLException e) {
+            showError("Lỗi khi kiểm tra số lượng: " + e.getMessage());
         }
     }
 
@@ -201,7 +244,7 @@ public class VendingMachineController {
             try (Connection conn = DatabaseConnection.getConnection()) {
                 conn.setAutoCommit(false);
                 try {
-                    // Cập nhật số lượng sản phẩm
+                 
                     String updateProductSql = "UPDATE products SET quantity = quantity - ? WHERE id = ?";
                     String insertTransactionSql = "INSERT INTO transactions (product_id, quantity, total_price) VALUES (?, ?, ?)";
                     

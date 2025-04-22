@@ -39,21 +39,21 @@ public class AdminProductController {
     
     @FXML
     public void initialize() {
-        // Initialize table columns
+      
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imagePath"));
         
-        // Load data from database
+      
         loadProductsFromDatabase();
         
-        // Setup filtered list
+     
         filteredProducts = new FilteredList<>(products, _ -> true);
         productTable.setItems(filteredProducts);
         
-        // Setup search functionality
+      
         searchField.textProperty().addListener((_, _, newValue) -> {
             filteredProducts.setPredicate(product -> {
                 if (newValue == null || newValue.isEmpty()) {
@@ -66,10 +66,9 @@ public class AdminProductController {
             updateStatistics();
         });
         
-        // Add edit/delete buttons to each row
+  
         setupActionsColumn();
-        
-        // Initial statistics update
+   
         updateStatistics();
     }
     

@@ -45,12 +45,3 @@ INSERT INTO products (name, price, quantity, image_url) VALUES
 ('Aquafina', 8000, 50, 'nuockhoang.png'),
 ('Pepsi', 10000, 50, 'coca.png');
 
-INSERT INTO transactions (product_id, quantity, total_price) VALUES
-(1, 2, 20000),  -- Mua 2 nước suối
-(2, 1, 10000),  -- Mua 1 coca
-(3, 3, 36000),  -- Mua 3 nước cam
-(4, 1, 12000),  -- Mua 1 trà xanh
-(5, 2, 20000),  -- Mua 2 chanh muối
-(6, 1, 20000),  -- Mua 1 nước tăng lực
-(7, 3, 24000),  -- Mua 3 aquafina
-(8, 2, 20000);  -- Mua 2 pepsi

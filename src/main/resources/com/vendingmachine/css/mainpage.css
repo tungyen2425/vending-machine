@@ -71,6 +71,16 @@
   -fx-background-color: #1565c0;
 }
 
+.product-button.out-of-stock {
+  -fx-background-color: #e0e0e0;
+  -fx-text-fill: #757575;
+  -fx-cursor: default;
+}
+
+.product-button.out-of-stock:hover {
+  -fx-background-color: #e0e0e0;
+}
+
 /* Cart panel styles */
 .cart-panel {
   -fx-background-color: white;
