@@ -33,6 +33,7 @@ public class AdminProductController {
     @FXML private Label totalValueLabel;
     @FXML private Label totalRevenueLabel;
     @FXML private TextField searchField;
+    @FXML private Button logoutButton;
     
     private ObservableList<Product> products = FXCollections.observableArrayList();
     private FilteredList<Product> filteredProducts;
@@ -405,6 +406,24 @@ public class AdminProductController {
         }
     }
     
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/vendingmachine/fxml/mainpage.fxml"));
+            Parent mainPage = loader.load();
+            Scene scene = new Scene(mainPage, 900, 680);
+            scene.getStylesheets().add(getClass().getResource("/com/vendingmachine/css/mainpage.css").toExternalForm());
+            
+            Stage stage = (Stage) productTable.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Vending Machine");
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            showError("Không thể đăng xuất: " + e.getMessage());
+        }
+    }
+    
     private void updateStatistics() {
         totalProductsLabel.setText(String.valueOf(filteredProducts.size()));
         long lowStockCount = filteredProducts.stream().filter(p -> p.getQuantity() < 10).count();
@@ -415,7 +434,6 @@ public class AdminProductController {
                 .sum();
         totalValueLabel.setText(String.format("%,.0f VNĐ", totalValue));
 
-        // Tính tổng doanh thu
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT SUM(total_price) as total FROM transactions")) {
             

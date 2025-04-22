@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vendingmachine.controller.AdminProductController">
+<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vendingmachine.controller.AdminProductController">
     <top>
         <VBox spacing="10">
             <padding>
@@ -73,6 +73,9 @@
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
+         <children>
+                <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="action-button" text="Đăng xuất" />
+         </children>
         </HBox>
     </bottom>
 </BorderPane>
