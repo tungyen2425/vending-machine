@@ -36,11 +36,18 @@
                     <Label styleClass="stat-label" text="Tổng doanh thu" />
                     <Label fx:id="totalRevenueLabel" styleClass="stat-value" text="0 VNĐ" />
                 </VBox>
+                <VBox styleClass="stat-box">
+                    <children>
+                        <Label styleClass="stat-label" text="Tiền còn trong máy" />
+                        <Label fx:id="machineBalance" styleClass="stat-value" text="0 VNĐ" />
+                    </children>
+                </VBox>
             </HBox>
             
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Label styleClass="page-title" text="Quản lý sản phẩm" />
                 <Region HBox.hgrow="ALWAYS" />
+                  <Button fx:id="withdrawButton" onAction="#handleWithdrawMoney" styleClass="withdraw-button" text="Rút tiền" />
                 <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" styleClass="action-button" text="Xem lịch sử đơn hàng" />
                 <Button fx:id="addProductButton" onAction="#handleAddProduct" styleClass="action-button" text="Thêm sản phẩm mới" />
             </HBox>

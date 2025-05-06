@@ -1,5 +1,7 @@
 package com.vendingmachine.controller;
 
+import com.vendingmachine.service.OrderService;
+import com.vendingmachine.model.Order;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +14,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import com.vendingmachine.database.DatabaseConnection;
 
 public class OrderHistoryController {
     @FXML private TableView<Order> orderTable;
@@ -25,6 +26,7 @@ public class OrderHistoryController {
     @FXML private DatePicker toDate;
     @FXML private Label totalRevenueLabel;
 
+    private final OrderService orderService = new OrderService();
     private ObservableList<Order> orders = FXCollections.observableArrayList();
 
     @FXML
@@ -35,13 +37,13 @@ public class OrderHistoryController {
 
     private void setupColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        productColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        productColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("transactionDate"));
         
         // Format price column
-        totalPriceColumn.setCellFactory(column -> new TableCell<Order, Double>() {
+        totalPriceColumn.setCellFactory(_ -> new TableCell<Order, Double>() {
             @Override
             protected void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
@@ -54,7 +56,7 @@ public class OrderHistoryController {
         });
 
         // Format date column
-        dateColumn.setCellFactory(column -> new TableCell<Order, Timestamp>() {
+        dateColumn.setCellFactory(_ -> new TableCell<Order, Timestamp>() {
             @Override
             protected void updateItem(Timestamp date, boolean empty) {
                 super.updateItem(date, empty);
@@ -71,52 +73,35 @@ public class OrderHistoryController {
     private void handleFilter() {
         LocalDate start = fromDate.getValue();
         LocalDate end = toDate.getValue();
-        loadOrders(start, end);
+        
+        if (start == null || end == null) {
+            showError("Vui lòng chọn khoảng thời gian!");
+            return;
+        }
+        
+        try {
+            orders.clear();
+            orders.addAll(orderService.getOrdersByDateRange(start, end));
+            orderTable.setItems(orders);
+            
+            double totalRevenue = orderService.getTotalRevenue(start, end);
+            totalRevenueLabel.setText(String.format("%,.0f VNĐ", totalRevenue));
+        } catch (SQLException e) {
+            showError("Lỗi khi tải dữ liệu: " + e.getMessage());
+        }
     }
 
     private void loadOrders() {
-        loadOrders(null, null);
-    }
-
-    private void loadOrders(LocalDate fromDate, LocalDate toDate) {
-        orders.clear();
-        String sql = "SELECT t.id, p.name, t.quantity, t.total_price, t.transaction_date " +
-                    "FROM transactions t " +
-                    "JOIN products p ON t.product_id = p.id ";
-        
-        if (fromDate != null && toDate != null) {
-            sql += "WHERE DATE(t.transaction_date) BETWEEN ? AND ? ";
-        }
-        sql += "ORDER BY t.transaction_date DESC";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            if (fromDate != null && toDate != null) {
-                stmt.setDate(1, Date.valueOf(fromDate));
-                stmt.setDate(2, Date.valueOf(toDate));
-            }
-
-            ResultSet rs = stmt.executeQuery();
-            double totalRevenue = 0;
-
-            while (rs.next()) {
-                Order order = new Order(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getInt("quantity"),
-                    rs.getDouble("total_price"),
-                    rs.getTimestamp("transaction_date")
-                );
-                orders.add(order);
-                totalRevenue += order.getTotalPrice();
-            }
-
+        try {
+            LocalDate today = LocalDate.now();
+            orders.clear();
+            orders.addAll(orderService.getOrdersByDateRange(today, today));
             orderTable.setItems(orders);
+            
+            double totalRevenue = orderService.getTotalRevenue(today, today);
             totalRevenueLabel.setText(String.format("%,.0f VNĐ", totalRevenue));
-
         } catch (SQLException e) {
-            showError("Lỗi khi tải lịch sử đơn hàng: " + e.getMessage());
+            showError("Lỗi khi tải dữ liệu: " + e.getMessage());
         }
     }
 
@@ -141,27 +126,5 @@ public class OrderHistoryController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public static class Order {
-        private final int id;
-        private final String productName;
-        private final int quantity;
-        private final double totalPrice;
-        private final Timestamp transactionDate;
-
-        public Order(int id, String productName, int quantity, double totalPrice, Timestamp transactionDate) {
-            this.id = id;
-            this.productName = productName;
-            this.quantity = quantity;
-            this.totalPrice = totalPrice;
-            this.transactionDate = transactionDate;
-        }
-
-        public int getId() { return id; }
-        public String getProductName() { return productName; }
-        public int getQuantity() { return quantity; }
-        public double getTotalPrice() { return totalPrice; }
-        public Timestamp getTransactionDate() { return transactionDate; }
     }
 }

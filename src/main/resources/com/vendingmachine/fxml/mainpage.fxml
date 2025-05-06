@@ -63,6 +63,7 @@
             <VBox spacing="15" alignment="CENTER">
                 <Button text="Thanh toán" onAction="#handlePayment" styleClass="payment-button"/>
                 <Button text="Hủy" onAction="#handleCancel" styleClass="cancel-button"/>
+                <Button text="Lấy lại tiền" onAction="#handleWithdrawBalance" styleClass="withdraw-button"/>
             </VBox>
             
             <Button text="Nạp tiền" onAction="#handleDeposit" styleClass="deposit-button"/>

@@ -104,4 +104,18 @@ public class ProductService {
         }
         return null;
     }
+
+    public double getTotalRevenue() throws SQLException {
+        String sql = "SELECT SUM(total_price) as total FROM transactions";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        }
+        return 0.0;
+    }
 }

@@ -3,6 +3,7 @@ module com.vendingmachine {
     requires javafx.fxml;
     requires transitive java.sql;
     requires java.base;
+    requires mysql.connector.j;
     
     opens com.vendingmachine to javafx.fxml;
     opens com.vendingmachine.controller to javafx.fxml;

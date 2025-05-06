@@ -1,5 +1,10 @@
 package com.vendingmachine.controller;
 
+import com.vendingmachine.service.ProductService;
+import com.vendingmachine.service.OrderService;
+import com.vendingmachine.service.VendingMachineService;
+import com.vendingmachine.model.Product;
+import com.vendingmachine.model.Order;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
@@ -12,11 +17,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.FlowPane;
-import javafx.animation.TranslateTransition;
-import javafx.animation.ScaleTransition;
-import javafx.util.Duration;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Insets;
@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
-import com.vendingmachine.database.DatabaseConnection;
+import java.util.List;
 
 public class VendingMachineController {
     @FXML private Label totalPriceLabel;
@@ -34,38 +34,34 @@ public class VendingMachineController {
     @FXML private Label balanceLabel;
     @FXML private FlowPane productsFlowPane;
     
-    private double balance = 0.0;
+    private final ProductService productService = new ProductService();
+    private final OrderService orderService = new OrderService();
+    private final VendingMachineService vendingMachineService = new VendingMachineService();
+    
+    private double balance = 0.0; // Số dư của khách hàng
     private double totalPrice = 0.0;
     private ObservableList<String> cartItems = FXCollections.observableArrayList();
     private NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.of("vi", "VN"));
-    private Map<String, Integer> productIdMap = new HashMap<>();
+    private Map<String, Product> productMap = new HashMap<>();
     private Map<String, Integer> currentCart = new HashMap<>();
+    private Map<String, Integer> productIdMap = new HashMap<>();
 
     @FXML
     public void initialize() {
         cartListView.setItems(cartItems);
         updateBalanceDisplay();
-        loadProductsFromDatabase();
-        setupButtonAnimations();
-        setupDropShadows();
+        loadProducts();
     }
 
-    private void loadProductsFromDatabase() {
-        String sql = "SELECT * FROM products ORDER BY id";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            
+    private void loadProducts() {
+        try {
+            List<Product> products = productService.getAllProducts();
             productsFlowPane.getChildren().clear();
             
-            while (rs.next()) {
-                String name = rs.getString("name");
-                double price = rs.getDouble("price");
-                String imageUrl = rs.getString("image_url");
-                int id = rs.getInt("id");
-                
-                productIdMap.put(name, id);
-                VBox productBox = createProductBox(name, price, imageUrl);
+            for (Product product : products) {
+                productMap.put(product.getName(), product);
+                productIdMap.put(product.getName(), Integer.parseInt(product.getId()));
+                VBox productBox = createProductBox(product);
                 productsFlowPane.getChildren().add(productBox);
             }
         } catch (SQLException e) {
@@ -73,7 +69,7 @@ public class VendingMachineController {
         }
     }
 
-    private VBox createProductBox(String name, double price, String imageUrl) {
+    private VBox createProductBox(Product product) {
         VBox productBox = new VBox();
         productBox.setAlignment(javafx.geometry.Pos.CENTER);
         productBox.getStyleClass().add("product-box");
@@ -84,99 +80,31 @@ public class VendingMachineController {
         imageView.setFitWidth(80);
         imageView.setPreserveRatio(true);
         try {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/com/vendingmachine/images/" + imageUrl)));
+            imageView.setImage(new Image(getClass().getResourceAsStream("/com/vendingmachine/images/" + product.getImagePath())));
         } catch (Exception e) {
             imageView.setImage(new Image(getClass().getResourceAsStream("/com/vendingmachine/images/default.png")));
         }
 
-        Label nameLabel = new Label(name);
+        Label nameLabel = new Label(product.getName());
         nameLabel.getStyleClass().add("product-name");
         nameLabel.setWrapText(true);
-        VBox.setMargin(nameLabel, new Insets(8, 0, 0, 0));
 
-        Label priceLabel = new Label(currencyFormat.format(price));
+        Label priceLabel = new Label(currencyFormat.format(product.getPrice()));
         priceLabel.getStyleClass().add("product-price");
-        VBox.setMargin(priceLabel, new Insets(5));
 
         Button actionButton;
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT quantity FROM products WHERE id = ?")) {
-            
-            stmt.setInt(1, productIdMap.get(name));
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next() && rs.getInt("quantity") > 0) {
-                actionButton = new Button("Chọn");
-                actionButton.getStyleClass().add("product-button");
-                actionButton.setOnAction(e -> handleProductSelection(name, price));
-            } else {
-                actionButton = new Button("Hết hàng");
-                actionButton.getStyleClass().addAll("product-button", "out-of-stock");
-                actionButton.setDisable(true);
-            }
-        } catch (SQLException e) {
-            actionButton = new Button("Lỗi");
+        if (product.getQuantity() > 0) {
+            actionButton = new Button("Chọn");
+            actionButton.getStyleClass().add("product-button");
+            actionButton.setOnAction(_ -> handleProductSelection(product));
+        } else {
+            actionButton = new Button("Hết hàng");
+            actionButton.getStyleClass().addAll("product-button", "out-of-stock");
             actionButton.setDisable(true);
-            showError("Lỗi khi kiểm tra số lượng: " + e.getMessage());
         }
-        
-        VBox.setMargin(actionButton, new Insets(5, 0, 0, 0));
+
         productBox.getChildren().addAll(imageView, nameLabel, priceLabel, actionButton);
         return productBox;
-    }
-
-    private void setupButtonAnimations() {
-        findProductBoxes().forEach(productBox -> {
-            productBox.setOnMouseEntered(_ -> {
-                ScaleTransition st = new ScaleTransition(Duration.millis(100), productBox);
-                st.setToX(1.05);
-                st.setToY(1.05);
-                st.play();
-            });
-            
-            productBox.setOnMouseExited(_ -> {
-                ScaleTransition st = new ScaleTransition(Duration.millis(100), productBox);
-                st.setToX(1.0);
-                st.setToY(1.0);
-                st.play();
-            });
-        });
-    }
-
-    private void setupDropShadows() {
-        DropShadow productShadow = new DropShadow();
-        productShadow.setColor(Color.rgb(0, 0, 0, 0.2));
-        productShadow.setRadius(10);
-        productShadow.setOffsetY(3);
-        
-        DropShadow cartShadow = new DropShadow();
-        cartShadow.setColor(Color.rgb(0, 0, 0, 0.1));
-        cartShadow.setRadius(5);
-        cartShadow.setOffsetX(-5);
-        
-        findProductBoxes().forEach(box -> box.setEffect(productShadow));
-        
-        Node cartPanel = cartListView.getParent();
-        while (cartPanel != null && !(cartPanel instanceof VBox)) {
-            cartPanel = cartPanel.getParent();
-        }
-        if (cartPanel != null) {
-            cartPanel.setEffect(cartShadow);
-        }
-    }
-
-    private ObservableList<VBox> findProductBoxes() {
-        ObservableList<VBox> productBoxes = FXCollections.observableArrayList();
-        for (Node node : productsFlowPane.getChildren()) {
-            if (node instanceof VBox && node.getStyleClass().contains("product-box")) {
-                productBoxes.add((VBox) node);
-            }
-        }
-        return productBoxes;
-    }
-
-    private double parsePrice(String priceText) {
-        return Double.parseDouble(priceText.replaceAll("[^\\d]", ""));
     }
 
     @FXML
@@ -187,116 +115,120 @@ public class VendingMachineController {
         dialog.setContentText("Số tiền (VNĐ):");
         
         dialog.showAndWait().ifPresent(amount -> {
+            double depositAmount = Double.parseDouble(amount);
             try {
-                double depositAmount = Double.parseDouble(amount);
                 if (depositAmount > 0) {
+                    // Cập nhật số dư của khách hàng
                     balance += depositAmount;
+                    // Cập nhật số tiền trong máy
+                    vendingMachineService.updateBalance(depositAmount);
                     updateBalanceDisplay();
                     showNotification("Nạp tiền thành công", "Số dư: " + currencyFormat.format(balance));
+                } else {
+                    showError("Số tiền phải lớn hơn 0");
                 }
             } catch (NumberFormatException e) {
                 showError("Số tiền không hợp lệ");
+            } catch (SQLException e) {
+                showError("Lỗi khi cập nhật số dư: " + e.getMessage());
+                // Rollback balance nếu có lỗi
+                balance -= depositAmount;
+                updateBalanceDisplay();
             }
         });
     }
 
-    public void handleProductSelection(String productName, double price) {
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT quantity FROM products WHERE id = ?")) {
-            
-            int productId = productIdMap.get(productName);
-            stmt.setInt(1, productId);
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                int availableQuantity = rs.getInt("quantity");
-                int currentQuantity = currentCart.getOrDefault(productName, 0);
-                
-                if (availableQuantity <= 0) {
-                    showError("Sản phẩm đã hết hàng!");
+    @FXML
+    private void handleWithdrawBalance() {
+        if (balance > 0) {
+            try {
+                // Kiểm tra số dư trong máy
+                double machineBalance = vendingMachineService.getCurrentBalance();
+                if (machineBalance < balance) {
+                    showError("Máy tạm thời không đủ tiền. Vui lòng thông báo cho nhân viên.");
                     return;
                 }
                 
-                if (currentQuantity >= availableQuantity) {
-                    showError("Số lượng trong kho không đủ!");
-                    return;
-                }
-                
-                if (balance >= price) {
-                    balance -= price;
-                    totalPrice += price;
-                    cartItems.add(productName + " - " + currencyFormat.format(price));
-                    currentCart.merge(productName, 1, Integer::sum);
-                    updateBalanceDisplay();
-                    updateTotalPrice();
-                } else {
-                    showError("Số dư không đủ. Vui lòng nạp thêm tiền.");
-                }
+                vendingMachineService.updateBalance(-balance);
+                showNotification("Lấy tiền thành công", "Số tiền: " + currencyFormat.format(balance));
+                balance = 0;
+                updateBalanceDisplay();
+            } catch (SQLException e) {
+                showError("Lỗi khi lấy tiền: " + e.getMessage());
+            }
+        } else {
+            showNotification("Thông báo", "Không có tiền để lấy");
+        }
+    }
+
+    private void handleProductSelection(Product product) {
+        try {
+            Product currentProduct = productService.getProductById(product.getId());
+            if (currentProduct == null || currentProduct.getQuantity() <= 0) {
+                showError("Sản phẩm đã hết hàng!");
+                return;
+            }
+            
+            int currentQuantity = currentCart.getOrDefault(product.getName(), 0);
+            if (currentQuantity >= currentProduct.getQuantity()) {
+                showError("Số lượng trong kho không đủ!");
+                return;
+            }
+            
+            if (balance >= product.getPrice()) {
+                balance -= product.getPrice();
+                totalPrice += product.getPrice();
+                cartItems.add(product.getName() + " - " + currencyFormat.format(product.getPrice()));
+                currentCart.merge(product.getName(), 1, Integer::sum);
+                updateBalanceDisplay();
+                updateTotalPrice();
+            } else {
+                showError("Số dư không đủ. Vui lòng nạp thêm tiền.");
             }
         } catch (SQLException e) {
-            showError("Lỗi khi kiểm tra số lượng: " + e.getMessage());
+            showError("Lỗi khi kiểm tra sản phẩm: " + e.getMessage());
         }
     }
 
     @FXML
     private void handlePayment() {
         if (!cartItems.isEmpty()) {
-            try (Connection conn = DatabaseConnection.getConnection()) {
-                conn.setAutoCommit(false);
-                try {
-                 
-                    String updateProductSql = "UPDATE products SET quantity = quantity - ? WHERE id = ?";
-                    String insertTransactionSql = "INSERT INTO transactions (product_id, quantity, total_price) VALUES (?, ?, ?)";
+            try {
+                // Create orders and update product quantities
+                for (Map.Entry<String, Integer> entry : currentCart.entrySet()) {
+                    String productName = entry.getKey();
+                    int quantity = entry.getValue();
+                    int productId = productIdMap.get(productName);
+                    double productPrice = parseProductPrice(productName);
                     
-                    PreparedStatement updateProductStmt = conn.prepareStatement(updateProductSql);
-                    PreparedStatement insertTransactionStmt = conn.prepareStatement(insertTransactionSql);
-
-                    for (Map.Entry<String, Integer> entry : currentCart.entrySet()) {
-                        String productName = entry.getKey();
-                        int quantity = entry.getValue();
-                        int productId = productIdMap.get(productName);
-                        double productPrice = parseProductPrice(productName);
-                        
-                        // Cập nhật số lượng
-                        updateProductStmt.setInt(1, quantity);
-                        updateProductStmt.setInt(2, productId);
-                        updateProductStmt.executeUpdate();
-                        
-                        // Thêm giao dịch
-                        insertTransactionStmt.setInt(1, productId);
-                        insertTransactionStmt.setInt(2, quantity);
-                        insertTransactionStmt.setDouble(3, productPrice * quantity);
-                        insertTransactionStmt.executeUpdate();
-                    }
+                    // Update product quantity
+                    productService.updateQuantity(String.valueOf(productId), quantity);
                     
-                    conn.commit();
-                    showNotification("Thanh toán thành công", "Tổng tiền: " + currencyFormat.format(totalPrice));
-                    
-                    // Reset cart
-                    cartItems.clear();
-                    currentCart.clear();
-                    totalPrice = 0.0;
-                    updateTotalPrice();
-                    
-                    // Reload products để cập nhật số lượng hiển thị
-                    loadProductsFromDatabase();
-                } catch (SQLException e) {
-                    conn.rollback();
-                    showError("Lỗi khi thanh toán: " + e.getMessage());
+                    // Create order record
+                    Order order = new Order(
+                        0,
+                        productId,
+                        quantity,
+                        productPrice * quantity,
+                        new Timestamp(System.currentTimeMillis())
+                    );
+                    orderService.createOrder(order);
                 }
+                
+                showNotification("Thanh toán thành công", "Tổng tiền: " + currencyFormat.format(totalPrice));
+                
+                // Reset cart
+                cartItems.clear();
+                currentCart.clear();
+                totalPrice = 0.0;
+                updateTotalPrice();
+                
+                // Reload products
+                loadProductsFromDatabase();
             } catch (SQLException e) {
-                showError("Lỗi kết nối database: " + e.getMessage());
+                showError("Lỗi khi thanh toán: " + e.getMessage());
             }
         }
-    }
-
-    private double parseProductPrice(String productName) {
-        String priceText = cartItems.stream()
-            .filter(item -> item.startsWith(productName))
-            .findFirst()
-            .map(item -> item.split(" - ")[1])
-            .orElse("0 VNĐ");
-        return Double.parseDouble(priceText.replaceAll("[^\\d]", ""));
     }
 
     @FXML
@@ -322,13 +254,9 @@ public class VendingMachineController {
             Scene scene = new Scene(loginPage);
             stage.setScene(scene);
             
-            // Đóng cửa sổ hiện tại
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-            
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Đường dẫn FXML: " + getClass().getResource("/com/vendingmachine/fxml/login.fxml"));
             showError("Không thể mở trang đăng nhập: " + e.getMessage());
         }
     }
@@ -355,5 +283,14 @@ public class VendingMachineController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private double parseProductPrice(String productName) {
+        Product product = productMap.get(productName);
+        return product != null ? product.getPrice() : 0.0;
+    }
+
+    private void loadProductsFromDatabase() {
+        loadProducts();
     }
 }
