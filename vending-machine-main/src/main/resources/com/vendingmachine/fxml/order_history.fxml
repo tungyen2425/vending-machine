@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vendingmachine.controller.OrderHistoryController">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="10" left="20" right="20" top="20" />
+            </padding>
+            
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label styleClass="page-title" text="Lịch sử đơn hàng" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleBack" text="Quay lại" styleClass="action-button" />
+            </HBox>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <DatePicker fx:id="fromDate" promptText="Từ ngày" />
+                <DatePicker fx:id="toDate" promptText="Đến ngày" />
+                <Button onAction="#handleFilter" text="Lọc" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label text="Tổng doanh thu:" />
+                <Label fx:id="totalRevenueLabel" styleClass="total-revenue" />
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <TableView fx:id="orderTable">
+            <columns>
+                <TableColumn fx:id="idColumn" text="Mã đơn" prefWidth="100" />
+                <TableColumn fx:id="productColumn" text="Sản phẩm" prefWidth="200" />
+                <TableColumn fx:id="quantityColumn" text="Số lượng" prefWidth="100" />
+                <TableColumn fx:id="totalPriceColumn" text="Tổng tiền" prefWidth="150" />
+                <TableColumn fx:id="dateColumn" text="Ngày mua" prefWidth="200" />
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

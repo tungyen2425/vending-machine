@@ -1,0 +1,99 @@
+.root {
+    -fx-font-family: 'Segoe UI', system-ui, sans-serif;
+    -fx-background-color: #f5f5f5;
+}
+
+/* Common styles */
+.button {
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 16px;
+}
+
+.action-button {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: white;
+}
+
+.action-button:hover {
+    -fx-background-color: #1976d2;
+}
+
+.collect-money-button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+}
+
+.collect-money-button:hover {
+    -fx-background-color: #388e3c;
+}
+
+/* Stats Panel */
+.stats-panel {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.stat-box {
+    -fx-alignment: center;
+    -fx-spacing: 5;
+    -fx-padding: 10px;
+    -fx-min-width: 150px;
+}
+
+.stat-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
+
+.stat-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2196f3;
+}
+
+/* Table styles */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.table-view .column-header {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 10px;
+}
+
+.table-view .table-cell {
+    -fx-alignment: center-left;
+    -fx-padding: 10px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+}
+
+/* Search field */
+.text-field {
+    -fx-background-color: white;
+    -fx-padding: 8px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 4px;
+}
+
+.text-field:focused {
+    -fx-border-color: #2196f3;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}

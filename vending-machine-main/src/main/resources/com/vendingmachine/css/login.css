@@ -1,0 +1,111 @@
+.root {
+  -fx-font-family: "System";
+  -fx-background-color: white;
+}
+
+/* Left panel styles */
+.left-panel {
+  -fx-background-color: linear-gradient(to bottom right, #3498db, #2980b9);
+}
+
+.title-label {
+  -fx-text-fill: white;
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+}
+
+.subtitle-label {
+  -fx-text-fill: white;
+  -fx-font-size: 16px;
+  -fx-opacity: 0.9;
+}
+
+/* Right panel styles */
+.right-panel {
+  -fx-background-color: white;
+}
+
+.login-header {
+  -fx-font-size: 28px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2c3e50;
+}
+
+.form-label {
+  -fx-font-size: 14px;
+  -fx-text-fill: #34495e;
+  -fx-font-weight: bold;
+}
+
+.form-field {
+  -fx-pref-height: 40px;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+  -fx-border-color: #bdc3c7;
+  -fx-border-width: 1;
+  -fx-background-color: white;
+  -fx-padding: 5 10 5 10;
+  -fx-font-size: 14px;
+}
+
+.form-field:focused {
+  -fx-border-color: #3498db;
+  -fx-background-color: #f8f9fa;
+}
+
+.login-btn {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-cursor: hand;
+  -fx-background-radius: 5;
+  -fx-padding: 10 30;
+  -fx-min-width: 120px;
+}
+
+.login-btn:hover {
+  -fx-background-color: #2980b9;
+}
+
+.login-btn:pressed {
+  -fx-background-color: #2472a4;
+}
+
+.login-btn:disabled {
+  -fx-background-color: #bdc3c7;
+  -fx-opacity: 0.7;
+}
+
+.login-progress {
+  -fx-progress-color: #3498db;
+}
+
+.error-message {
+  -fx-text-fill: #e74c3c;
+  -fx-font-size: 13px;
+  -fx-min-height: 20px;
+  -fx-text-alignment: center;
+}
+
+/* Hyperlink styles */
+.hyperlink {
+  -fx-text-fill: #3498db;
+  -fx-border-color: transparent;
+  -fx-padding: 4 0;
+}
+
+.hyperlink:hover {
+  -fx-text-fill: #2980b9;
+  -fx-underline: true;
+}
+
+.hyperlink:pressed {
+  -fx-text-fill: #2472a4;
+}
+
+.version-text {
+  -fx-fill: #95a5a6;
+  -fx-font-size: 12px;
+  -fx-opacity: 0.7;
+}

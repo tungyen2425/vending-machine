@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vendingmachine.controller.AdminProductController">
+   <top>
+      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <HBox spacing="20.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+               <children>
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-padding: 10;">
+                     <children>
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Tổng sản phẩm" />
+                        <Label fx:id="totalProductsLabel" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2196f3;" text="0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-padding: 10;">
+                     <children>
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Sản phẩm sắp hết" />
+                        <Label fx:id="lowStockLabel" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2196f3;" text="0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-padding: 10;">
+                     <children>
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Tổng giá trị tồn kho" />
+                        <Label fx:id="totalValueLabel" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2196f3;" text="0 VNĐ" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-padding: 10;">
+                     <children>
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Tổng doanh thu" />
+                        <Label fx:id="totalRevenueLabel" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2196f3;" text="0 VNĐ" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-padding: 10;">
+                     <children>
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Tiền mặt trong máy" />
+                        <Label fx:id="machineBalanceLabel" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2196f3;" text="0 VNĐ" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox spacing="10.0">
+               <children>
+                  <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Quản lý sản phẩm" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button fx:id="collectMoneyButton" onAction="#handleCollectMoney" style="-fx-background-color: #4caf50; -fx-text-fill: white;" text="Thu tiền" />
+                  <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" style="-fx-background-color: #2196f3; -fx-text-fill: white;" text="Xem lịch sử đơn hàng" />
+                  <Button fx:id="addProductButton" onAction="#handleAddProduct" style="-fx-background-color: #2196f3; -fx-text-fill: white;" text="Thêm sản phẩm mới" />
+               </children>
+            </HBox>
+            <HBox spacing="10.0">
+               <children>
+                  <TextField fx:id="searchField" promptText="Tìm kiếm theo tên hoặc mã sản phẩm" HBox.hgrow="ALWAYS" />
+                  <Button style="-fx-background-color: #2196f3; -fx-text-fill: white;" text="Tìm kiếm" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <TableView fx:id="productTable" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="idColumn" text="Mã SP" />
+          <TableColumn fx:id="nameColumn" text="Tên sản phẩm" />
+          <TableColumn fx:id="priceColumn" text="Giá" />
+          <TableColumn fx:id="quantityColumn" text="Số lượng" />
+          <TableColumn fx:id="imageColumn" text="Hình ảnh" />
+          <TableColumn fx:id="actionsColumn" text="Thao tác" />
+        </columns>
+         <placeholder>
+            <Label text="Không có sản phẩm nào" />
+         </placeholder>
+      </TableView>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" spacing="10.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets all="10.0" />
+         </padding>
+         <children>
+            <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: #2196f3; -fx-text-fill: white;" text="Đăng xuất" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>
