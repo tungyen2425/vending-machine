@@ -71,7 +71,7 @@ public class OrderHistoryController {
 
     @FXML
     private void handleFilter() {
-        LocalDate start = fromDate.getValue();
+        LocalDate  start = fromDate.getValue();
         LocalDate end = toDate.getValue();
         
         if (start == null || end == null) {
@@ -95,7 +95,7 @@ public class OrderHistoryController {
         try {
             LocalDate today = LocalDate.now();
             orders.clear();
-            orders.addAll(orderService.getOrdersByDateRange(today, today));
+            orders.addAll(orderService.getOrdersByDateRange(today.minusDays(30), today));
             orderTable.setItems(orders);
             
             double totalRevenue = orderService.getTotalRevenue(today, today);
