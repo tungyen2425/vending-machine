@@ -21,11 +21,15 @@ public class OrderService {
             
             stmt.executeUpdate();
         }
-    }
-
-    public List<Order> getOrdersByDateRange(LocalDate fromDate, LocalDate toDate) throws SQLException {
+    }    public List<Order> getOrdersByDateRange(LocalDate fromDate, LocalDate toDate) throws SQLException {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM transactions WHERE DATE(transaction_date) BETWEEN ? AND ? ORDER BY transaction_date DESC";
+        String sql = """
+            SELECT t.*, p.name as product_name 
+            FROM transactions t 
+            LEFT JOIN products p ON t.product_id = p.id 
+            WHERE DATE(transaction_date) BETWEEN ? AND ? 
+            ORDER BY transaction_date DESC
+            """;
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -38,6 +42,7 @@ public class OrderService {
                 Order order = new Order(
                     rs.getInt("id"),
                     rs.getInt("product_id"),
+                    rs.getString("product_name"),
                     rs.getInt("quantity"),
                     rs.getDouble("total_price"),
                     rs.getTimestamp("transaction_date")

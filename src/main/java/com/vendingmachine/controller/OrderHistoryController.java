@@ -33,11 +33,9 @@ public class OrderHistoryController {
     public void initialize() {
         setupColumns();
         loadOrders();
-    }
-
-    private void setupColumns() {
+    }    private void setupColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        productColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
+        productColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("transactionDate"));
@@ -67,15 +65,18 @@ public class OrderHistoryController {
                 }
             }
         });
-    }
-
-    @FXML
+    }    @FXML
     private void handleFilter() {
-        LocalDate  start = fromDate.getValue();
+        LocalDate start = fromDate.getValue();
         LocalDate end = toDate.getValue();
         
         if (start == null || end == null) {
             showError("Vui lòng chọn khoảng thời gian!");
+            return;
+        }
+        
+        if (start.isAfter(end)) {
+            showError("Ngày bắt đầu không được lớn hơn ngày kết thúc!");
             return;
         }
         
@@ -95,7 +96,7 @@ public class OrderHistoryController {
         try {
             LocalDate today = LocalDate.now();
             orders.clear();
-            orders.addAll(orderService.getOrdersByDateRange(today.minusDays(30), today));
+            orders.addAll(orderService.getOrdersByDateRange(today, today));
             orderTable.setItems(orders);
             
             double totalRevenue = orderService.getTotalRevenue(today, today);

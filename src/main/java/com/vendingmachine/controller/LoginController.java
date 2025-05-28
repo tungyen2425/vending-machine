@@ -56,10 +56,7 @@ public class LoginController {
         }
     }
 
-    @FXML
-    private void handleRegister(ActionEvent event) {
-        // TODO: Implement registration logic
-    }
+
 
     private void showError(String message) {
         errorMessageLabel.setText(message);

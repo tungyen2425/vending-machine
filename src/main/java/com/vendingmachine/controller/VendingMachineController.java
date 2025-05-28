@@ -203,11 +203,11 @@ public class VendingMachineController {
                     
                     // Update product quantity
                     productService.updateQuantity(String.valueOf(productId), quantity);
-                    
-                    // Create order record
+                      // Create order record
                     Order order = new Order(
                         0,
                         productId,
+                        productService.getProductById(String.valueOf(productId)).getName(),
                         quantity,
                         productPrice * quantity,
                         new Timestamp(System.currentTimeMillis())
